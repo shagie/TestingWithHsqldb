@@ -1,6 +1,7 @@
 package com.shagie.dbtest.db;
 
 import com.shagie.dbtest.db.objects.Data;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class DataAccess {
 	final private DBConnection db;
+	private final static Logger LOG = Logger.getLogger(DataAccess.class);
 
 	public DataAccess() {
 		db = new DBConnection();
@@ -43,6 +45,7 @@ public class DataAccess {
 					conn.close();
 				}
 			} catch (SQLException e) {
+				LOG.warn("Error closing resources");
 			}
 		}
 		return ret;
@@ -67,6 +70,7 @@ public class DataAccess {
 					conn.close();
 				}
 			} catch (SQLException e) {
+				LOG.warn("Error closing resources");
 			}
 		}
 	}
@@ -90,6 +94,7 @@ public class DataAccess {
 					conn.close();
 				}
 			} catch (SQLException e) {
+				LOG.warn("Error closing resources");
 			}
 		}
 	}
