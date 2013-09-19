@@ -5,35 +5,28 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class DBConnection {
-
-	public String sDriverName=null;
-	public String sServerName=null;
-	public String sPort=null;
-	public String sDatabaseName=null;
-	public String sUserName=null;
-	public String sPassword=null;
-
+class DBConnection {
 
 
 	public Connection getDBConnection() throws SQLException {
 		Connection conn = null;
 
 		try {
-			ResourceBundle rb= ResourceBundle.getBundle("connection_config");
+			ResourceBundle rb = ResourceBundle.getBundle("connection_config");
 
-			sDriverName=rb.getString("driver.name");
-			sServerName=rb.getString("server.name");
-			sPort=rb.getString("port.no");
-			sDatabaseName=rb.getString("database.name");
-			sUserName=rb.getString("user.name");
-			sPassword=rb.getString("user.password");
+			String sDriverName;
+			sDriverName = rb.getString("driver.name");
+			String sServerName = rb.getString("server.name");
+			String sPort = rb.getString("port.no");
+			String sDatabaseName = rb.getString("database.name");
+			String sUserName = rb.getString("user.name");
+			String sPassword = rb.getString("user.password");
 
 			Class.forName(sDriverName).newInstance();
 
-			String sURL ="jdbc:mysql://"+sServerName+":"+sPort+"/"+sDatabaseName;
+			String sURL = "jdbc:mysql://" + sServerName + ":" + sPort + "/" + sDatabaseName;
 
-			conn = DriverManager.getConnection(sURL,sUserName, sPassword);
+			conn = DriverManager.getConnection(sURL, sUserName, sPassword);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
