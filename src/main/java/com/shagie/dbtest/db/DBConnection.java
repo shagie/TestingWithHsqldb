@@ -1,9 +1,11 @@
 package com.shagie.dbtest.db;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+import java.util.Properties;
 
 class DBConnection {
 
@@ -12,19 +14,23 @@ class DBConnection {
 		Connection conn = null;
 
 		try {
-			ResourceBundle rb = ResourceBundle.getBundle("connection_config");
+			Properties prop = new Properties();
+			InputStream in = getClass().getResourceAsStream("/connection_config.properties");
+			prop.load(in);
+			in.close();
 
 			String sDriverName;
-			sDriverName = rb.getString("driver.name");
-			String sServerName = rb.getString("server.name");
-			String sPort = rb.getString("port.no");
-			String sDatabaseName = rb.getString("database.name");
-			String sUserName = rb.getString("user.name");
-			String sPassword = rb.getString("user.password");
+			sDriverName = prop.getProperty("driver.name");
+			String sDBFlavor = prop.getProperty("db.flavor");
+			String sServerName = prop.getProperty("server.name");
+			String sPort = prop.getProperty("port.no");
+			String sDatabaseName = prop.getProperty("database.name");
+			String sUserName = prop.getProperty("user.name");
+			String sPassword = prop.getProperty("user.password");
 
 			Class.forName(sDriverName).newInstance();
 
-			String sURL = "jdbc:mysql://" + sServerName + ":" + sPort + "/" + sDatabaseName;
+			String sURL = "jdbc:" + sDBFlavor + "://" + sServerName + ":" + sPort + "/" + sDatabaseName;
 
 			conn = DriverManager.getConnection(sURL, sUserName, sPassword);
 		} catch (InstantiationException e) {
@@ -32,6 +38,8 @@ class DBConnection {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return conn;
