@@ -9,7 +9,12 @@ import java.util.Properties;
 
 class DBConnection {
 
-
+	/**
+	 * Get a database connection based on connection_config.properties
+	 *
+	 * @return connection to database specified.
+	 * @throws SQLException
+	 */
 	public Connection getDBConnection() throws SQLException {
 		Connection conn = null;
 
@@ -19,20 +24,23 @@ class DBConnection {
 			prop.load(in);
 			in.close();
 
-			String sDriverName;
-			sDriverName = prop.getProperty("driver.name");
-			String sDBFlavor = prop.getProperty("db.flavor");
-			String sServerName = prop.getProperty("server.name");
-			String sPort = prop.getProperty("port.no");
-			String sDatabaseName = prop.getProperty("database.name");
-			String sUserName = prop.getProperty("user.name");
-			String sPassword = prop.getProperty("user.password");
+			String driverName = prop.getProperty("driver.name");
+			String userName = prop.getProperty("user.name");
+			String password = prop.getProperty("user.password");
 
-			Class.forName(sDriverName).newInstance();
+			String dbUrl = prop.getProperty("db.url");
+			if (dbUrl == null) {
+				String dbFlavor = prop.getProperty("db.flavor");
+				String serverName = prop.getProperty("server.name");
+				String port = prop.getProperty("port.no");
+				String databaseName = prop.getProperty("database.name");
 
-			String sURL = "jdbc:" + sDBFlavor + "://" + sServerName + ":" + sPort + "/" + sDatabaseName;
+				dbUrl = "jdbc:" + dbFlavor + "://" + serverName + ":" + port + "/" + databaseName;
+			}
 
-			conn = DriverManager.getConnection(sURL, sUserName, sPassword);
+			Class.forName(driverName).newInstance();
+
+			conn = DriverManager.getConnection(dbUrl, userName, password);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
