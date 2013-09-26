@@ -22,14 +22,6 @@ public class DataAccessTest {
 		DBConnection connection = new DBConnection();
 		try {
 			conn = connection.getDBConnection();
-			conn.createStatement().execute(
-					"CREATE TABLE data " +
-							"( " +
-							"    id IDENTITY, " +
-							"    txt VARCHAR(45) NOT NULL, " +
-							"    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-							"    active BIT DEFAULT 1 NOT NULL" +
-							")");
 			insert = conn.prepareStatement("INSERT INTO data (txt, ts, active) VALUES (?, ?, ?)");
 			insertId = conn.prepareStatement("INSERT INTO data (id, txt, ts, active) VALUES (?, ?, ?, ?)");
 		} catch (SQLException e) {
@@ -125,7 +117,7 @@ public class DataAccessTest {
 
 		DataAccess dao = new DataAccess();
 		dao.markInactive(1);
-		assertTrue(dao.getData().isEmpty());
+		assertTrue("database is not empty - contains " + dao.getData().size() + " items", dao.getData().isEmpty());
 	}
 
 	@Test
